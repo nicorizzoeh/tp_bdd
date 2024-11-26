@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Integración de Bases de Datos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container {
+            width: 48%;
+        }
+        .table-container {
+            width: 48%;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .clear-button {
+            background-color: #ff6347;
+            margin-top: 20px;
+        }
+        .clear-button:hover {
+            background-color: #e5533d;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Crear Usuario en MySQL -->
+    <div class="form-container">
+        <h1>Crear Usuario en MySQL</h1>
+        <form action="/create_mysql" method="POST">
+            <input type="text" name="name" placeholder="Nombre" required>
+            <input type="email" name="email" placeholder="Correo electrónico" required>
+            <button type="submit">Crear</button>
+        </form>
+
+        <!-- Limpiar Base de Datos MySQL -->
+        <form action="/clear_mysql" method="POST">
+            <button type="submit" class="clear-button">Limpiar Base de Datos MySQL</button>
+        </form>
+    </div>
+
+    <!-- Usuarios en MySQL -->
+    <div class="table-container">
+        <h1>Usuarios en MySQL</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Crear Usuario en MongoDB -->
+    <div class="form-container">
+        <h1>Crear Usuario en MongoDB</h1>
+        <form action="/create_mongo" method="POST">
+            <input type="text" name="name" placeholder="Nombre" required>
+            <input type="email" name="email" placeholder="Correo electrónico" required>
+            <button type="submit">Crear</button>
+        </form>
+
+        <!-- Limpiar Base de Datos MongoDB -->
+        <form action="/clear_mongo" method="POST">
+            <button type="submit" class="clear-button">Limpiar Base de Datos MongoDB</button>
+        </form>
+    </div>
+
+    <!-- Usuarios en MongoDB -->
+    <div class="table-container">
+        <h1>Usuarios en MongoDB</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in mongo_users %}
+                <tr>
+                    <td>{{ user['name'] }}</td>
+                    <td>{{ user['email'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
