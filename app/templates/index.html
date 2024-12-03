@@ -80,6 +80,19 @@
         .clear-button:hover {
             background-color: #e5533d;
         }
+        .delete-button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #e60000;
+        }
+
     </style>
 </head>
 <body>
@@ -98,6 +111,18 @@
         <form action="/clear_mysql" method="POST">
             <button type="submit" class="clear-button">Limpiar Base de Datos MySQL</button>
         </form>
+
+        {% with errors = get_flashed_messages(category_filter=["mysql"]) %}
+            {% if errors %}
+            <div class="alert-message block-message error">
+            <ul>
+                {%- for msg in errors %}
+                <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+            </div>
+            {% endif %}
+        {% endwith %}
     </div>
 
     <!-- Usuarios en MySQL -->
@@ -109,14 +134,37 @@
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Email</th>
+                    <th>Acciones</th>
+
                 </tr>
             </thead>
             <tbody>
                 {% for user in users %}
                 <tr>
                     <td>{{ user.id }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
+                    <td>
+                        <span id="mysql-name-text-{{ user.id }}">{{ user.name }}</span>
+                        <input type="text" id="mysql-name-input-{{ user.id }}" value="{{ user.name }}" style="display: none;">
+                    </td>
+                    <td>
+                        <span id="mysql-email-text-{{ user.id }}">{{ user.email }}</span>
+                        <input type="email" id="mysql-email-input-{{ user.id }}" value="{{ user.email }}" style="display: none;">
+                    </td>
+                    <td>
+                        <form action="/delete_mysql" method="POST" style="display: inline;">
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <button type="submit" class="delete-button">Borrar</button>
+                        </form>
+            
+                        <button type="button" onclick="toggleEdit( {{ user.id}}, 'mysql' )" id="mysql-edit-btn-{{ user.id }}">Editar</button>
+                        <button type="button" onclick="saveChanges( {{ user.id}}, 'mysql' )"id="mysql-save-btn-{{ user.id }}" style="display: none;">Guardar</button>
+                        <form action="/update_mysql" method="POST" id="mysql-update-form-{{ user.id }}" style="display: none;">
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <input type="hidden" name="name" id="mysql-form-name-{{ user.id }}">
+                            <input type="hidden" name="email" id="mysql-form-email-{{ user.id }}">
+                        </form>
+                    </td>
+                    
                 </tr>
                 {% endfor %}
             </tbody>
@@ -138,6 +186,18 @@
         <form action="/clear_mongo" method="POST">
             <button type="submit" class="clear-button">Limpiar Base de Datos MongoDB</button>
         </form>
+
+        {% with errors = get_flashed_messages(category_filter=["mongo"]) %}
+            {% if errors %}
+            <div class="alert-message block-message error">
+            <ul>
+                {%- for msg in errors %}
+                <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+            </div>
+            {% endif %}
+        {% endwith %}
     </div>
 
     <!-- Usuarios en MongoDB -->
@@ -148,13 +208,35 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Email</th>
+                    <th>Acciones</th>
+
                 </tr>
             </thead>
             <tbody>
                 {% for user in mongo_users %}
                 <tr>
-                    <td>{{ user['name'] }}</td>
-                    <td>{{ user['email'] }}</td>
+                    <td>
+                        <span id="mongo-name-text-{{ user._id }}">{{ user.name }}</span>
+                        <input type="text" id="mongo-name-input-{{ user._id }}" value="{{ user.name }}" style="display: none;">
+                    </td>
+                    <td>
+                        <span id="mongo-email-text-{{ user._id }}">{{ user.email }}</span>
+                        <input type="email" id="mongo-email-input-{{ user._id }}" value="{{ user.email }}" style="display: none;">
+                    </td>
+                    <td>
+                        <form action="/delete_mongo" method="POST" style="display: inline;">
+                            <input type="hidden" name="user_id" value="{{ user._id }}">
+                            <button type="submit" class="delete-button">Borrar</button>
+                        </form>
+            
+                        <button type="button" onclick="toggleEdit( '{{ user._id}}', 'mongo' )" id="mongo-edit-btn-{{ user._id }}">Editar</button>
+                        <button type="button" onclick="saveChanges( '{{ user._id}}', 'mongo' )"id="mongo-save-btn-{{ user._id }}" style="display: none;">Guardar</button>
+                        <form action="/update_mongo" method="POST" id="mongo-update-form-{{ user._id }}" style="display: none;">
+                            <input type="hidden" name="user_id" value="{{ user._id }}">
+                            <input type="hidden" name="name" id="mongo-form-name-{{ user._id }}">
+                            <input type="hidden" name="email" id="mongo-form-email-{{ user._id }}">
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -163,4 +245,43 @@
 </div>
 
 </body>
+
+<script>
+    function toggleEdit(userId, type) {
+        // Toggle visibility of text and input fields
+        const nameText = document.getElementById(`${type}-name-text-${userId}`);
+        const nameInput = document.getElementById(`${type}-name-input-${userId}`);
+        const emailText = document.getElementById(`${type}-email-text-${userId}`);
+        const emailInput = document.getElementById(`${type}-email-input-${userId}`);
+
+        const editButton = document.getElementById(`${type}-edit-btn-${userId}`);
+        const saveButton = document.getElementById(`${type}-save-btn-${userId}`);
+
+        // Switch to editing mode
+        nameText.style.display = 'none';
+        nameInput.style.display = 'inline';
+        emailText.style.display = 'none';
+        emailInput.style.display = 'inline';
+
+        editButton.style.display = 'none';
+        saveButton.style.display = 'inline';
+    }
+
+    function saveChanges(userId, type) {
+        // Sync inputs to the form and submit it
+        const nameInput = document.getElementById(`${type}-name-input-${userId}`);
+        const emailInput = document.getElementById(`${type}-email-input-${userId}`);
+        const formName = document.getElementById(`${type}-form-name-${userId}`);
+        const formEmail = document.getElementById(`${type}-form-email-${userId}`);
+        const updateForm = document.getElementById(`${type}-update-form-${userId}`);
+
+        formName.value = nameInput.value;
+        formEmail.value = emailInput.value;
+
+        // Submit the form
+        updateForm.submit();
+    }
+</script>
+
+
 </html>
