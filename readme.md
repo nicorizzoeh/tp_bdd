@@ -3,9 +3,9 @@
 ## Integrantes
 
  * Agustin Braida
- * Mateo Bulnes
- * Nicolas Agustin Rizzo Ehrenbock Padron 109756
- * Franco Favotti 109388
+ * Mateo Bulnes, Padrón: 106211
+ * Nicolas Agustin Rizzo Ehrenbock, Padrón: 109756
+ * Franco Favotti, Padrón: 109388
 
 ## Como usar
 
