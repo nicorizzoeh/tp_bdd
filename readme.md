@@ -6,6 +6,9 @@
  * Mateo Bulnes, Padrón: 106211
  * Nicolas Agustin Rizzo Ehrenbock, Padrón: 109756
  * Franco Favotti, Padrón: 109388
+ * Franco Gentilini, Padrón: 108733
+ * Martín Saad, Padrón: 110171
+
 
 ## Como usar
 
