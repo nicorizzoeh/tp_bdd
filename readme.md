@@ -2,7 +2,7 @@
 
 ## Integrantes
 
- * Agustin Braida
+ * Agustin Braida, Padrón: 106301
  * Mateo Bulnes, Padrón: 106211
  * Nicolas Agustin Rizzo Ehrenbock, Padrón: 109756
  * Franco Favotti, Padrón: 109388
@@ -15,7 +15,7 @@ Para instalar las dependencias
     pip install -r requeriments.txt
 ```
 
-La app se comunica con la bdd no relacion a traves del puerto especificado en la variable de configuracion MONGO_URI (por defecto 27017). Ejemplo de como levantar la bdd en docker:
+La app se comunica con la bdd no relacional a traves del puerto especificado en la variable de configuracion MONGO_URI (por defecto 27017). Ejemplo de como levantar la bdd en docker:
 
 ```
     export MONGODB_VERSION=6.0-ubi8
